@@ -5,15 +5,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class WeatherForecast {
-    private Location location;
-    private List<WeatherData> data;
-    private double lat;
-    private double lon;
+public class LocationResponse {
+    private String cityName;
+    private double avgTemp;
+    private double windSpd;
 }
