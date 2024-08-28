@@ -32,7 +32,7 @@ public class WeatherServiceTest {
 
     @Test
     void getForecastForLocation_Success() {
-        Location location = new Location("San Francisco", "USA");
+        Location location = new Location("San Francisco", "USA", "US");
         WeatherForecast forecast = new WeatherForecast();
         forecast.setLocation(location);
 
@@ -47,7 +47,7 @@ public class WeatherServiceTest {
 
     @Test
     void getForecastForLocation_NoData() {
-        Location location = new Location("San Francisco", "USA");
+        Location location = new Location("San Francisco", "USA", "US");
         ResponseEntity<WeatherForecast> responseEntity = new ResponseEntity<>(null, HttpStatus.OK);
         when(restTemplate.getForEntity(anyString(), eq(WeatherForecast.class))).thenReturn(responseEntity);
 
@@ -60,7 +60,7 @@ public class WeatherServiceTest {
 
     @Test
     void getForecastForLocation_FailedRequest() {
-        Location location = new Location("San Francisco", "USA");
+        Location location = new Location("San Francisco", "USA", "US");
         when(restTemplate.getForEntity(anyString(), eq(WeatherForecast.class)))
                 .thenThrow(new RestClientException("Request failed"));
 
@@ -73,7 +73,7 @@ public class WeatherServiceTest {
 
     @Test
     void getForecastForLocation_BadResponse() {
-        Location location = new Location("San Francisco", "USA");
+        Location location = new Location("San Francisco", "USA", "US");
         ResponseEntity<WeatherForecast> responseEntity = new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         when(restTemplate.getForEntity(anyString(), eq(WeatherForecast.class))).thenReturn(responseEntity);
 
