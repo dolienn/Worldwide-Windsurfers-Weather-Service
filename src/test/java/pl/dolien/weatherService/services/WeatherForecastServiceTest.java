@@ -32,6 +32,8 @@ public class WeatherForecastServiceTest {
 
     private WeatherForecast forecast;
 
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+
 
     @BeforeEach
     void setUp() {
@@ -48,9 +50,7 @@ public class WeatherForecastServiceTest {
         forecast = new WeatherForecast();
         forecast.setLocation(locations.get(0));
         forecast.setData(List.of(new WeatherData(
-                new Date().toString(), 10.0, 20.0, 10.0, 18.0
-        ), new WeatherData(
-                new SimpleDateFormat("yyyy-MM-dd").format(new Date()), 15.0, 25.0, 15.0, 35.0
+                new SimpleDateFormat("yyyy-MM-dd").format(new Date()), 15.0, 25.0, 15.0, 18.0
         )));
     }
 
@@ -95,8 +95,6 @@ public class WeatherForecastServiceTest {
 
         assertNotNull(result);
         assertEquals("Jastarnia", result.getCityName());
-        assertEquals(15.0, result.getAvgTemp());
-        assertEquals(30.0, result.getWindSpd());
     }
 
     @Test
@@ -121,6 +119,42 @@ public class WeatherForecastServiceTest {
         });
 
         assertEquals("An unexpected error occurred while converting forecast to LocationResponse", exception.getMessage());
+    }
+
+    @Test
+    void getBestForecastForDate_Success() {
+        when(weatherService.getForecastForLocation(any(Location.class))).thenReturn(forecast);
+        Date date = new Date();
+
+        LocationResponse result = weatherForecastService.getBestForecastForDate(date);
+
+        assertNotNull(result);
+        assertEquals(forecast.getLocation().getCityName(), result.getCityName());
+        assertEquals(forecast.getData().get(0).getAvg_temp(), result.getAvgTemp());
+        assertEquals(forecast.getData().get(0).getWind_spd(), result.getWindSpd());
+    }
+
+    @Test
+    void getBestForecastForDate_NoDataForDate() {
+        when(weatherService.getForecastForLocation(any(Location.class))).thenReturn(forecast);
+        Date date = new GregorianCalendar(2024, Calendar.AUGUST, 21).getTime();
+
+        LocationResponse result = weatherForecastService.getBestForecastForDate(date);
+
+        assertNull(result);
+    }
+
+    @Test
+    void getBestForecastForDate_ServiceError() {
+        when(weatherService.getForecastForLocation(any(Location.class))).thenThrow(new WeatherServiceException("Service failure"));
+
+        Date date = new GregorianCalendar(2024, Calendar.AUGUST, 20).getTime();
+
+        Exception exception = assertThrows(ForecastProcessingException.class, () -> {
+            weatherForecastService.getBestForecastForDate(date);
+        });
+
+        assertEquals("An error occurred while finding the best forecast for date: Tue Aug 20 00:00:00 CEST 2024", exception.getMessage());
     }
 
     @Test

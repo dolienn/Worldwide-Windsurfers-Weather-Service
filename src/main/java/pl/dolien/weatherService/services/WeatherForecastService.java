@@ -71,7 +71,6 @@ public class WeatherForecastService {
 
     public LocationResponse getBestForecastForDate(Date date) {
         try {
-            System.out.println(date);
             String dateString = new SimpleDateFormat("yyyy-MM-dd").format(date);
 
 
