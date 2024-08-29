@@ -73,7 +73,6 @@ public class WeatherForecastService {
         try {
             String dateString = new SimpleDateFormat("yyyy-MM-dd").format(date);
 
-
             List<WeatherForecast> forecastsForDate = toWeatherForecasts()
                     .stream()
                     .filter(forecast -> forecast.getData()
