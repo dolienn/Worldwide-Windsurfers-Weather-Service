@@ -53,15 +53,26 @@ public class WeatherForecastService {
         }
     }
 
-    public LocationResponse toLocationResponse(WeatherForecast forecast) {
+    public LocationResponse toLocationResponse(WeatherForecast forecast, String targetDate) {
         try {
             if (forecast == null || forecast.getData().isEmpty()) {
                 throw new IllegalArgumentException();
             }
 
+            Optional<WeatherData> matchingData = forecast.getData()
+                    .stream()
+                    .filter(data -> data.getDatetime().equals(targetDate))
+                    .findFirst();
+
+            if (matchingData.isEmpty()) {
+                throw new IllegalArgumentException("No data available for the specified date");
+            }
+
+            WeatherData data = matchingData.get();
+
             return new LocationResponse(forecast.getLocation().getCityName(),
-                    Math.round(forecast.getData().get(0).getAvg_temp() * 100.0) / 100.0,
-                    forecast.getData().get(0).getWind_spd());
+                    data.getAvg_temp(),
+                    data.getWind_spd());
         } catch (IllegalArgumentException e) {
             throw new ForecastProcessingException("Invalid forecast data for conversion to LocationResponse", e);
         } catch (Exception e) {
@@ -84,7 +95,7 @@ public class WeatherForecastService {
                     .stream()
                     .max((f1, f2) -> Double.compare(calculateMaxScore(f1), calculateMaxScore(f2)));
 
-            return bestForecast.map(this::toLocationResponse).orElse(null);
+            return bestForecast.map(forecast -> toLocationResponse(forecast, dateString)).orElse(null);
         } catch (Exception e) {
             throw new ForecastProcessingException("An error occurred while finding the best forecast for date: " + date, e);
         }

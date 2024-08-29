@@ -49,8 +49,9 @@ public class WeatherForecastServiceTest {
 
         forecast = new WeatherForecast();
         forecast.setLocation(locations.get(0));
-        forecast.setData(List.of(new WeatherData(
-                new SimpleDateFormat("yyyy-MM-dd").format(new Date()), 15.0, 25.0, 15.0, 18.0
+        forecast.setData(List.of(
+                new WeatherData(
+                new SimpleDateFormat("yyyy-MM-dd").format(new Date()), 15.0, 13.0, 20.0, 18.0
         )));
     }
 
@@ -89,9 +90,7 @@ public class WeatherForecastServiceTest {
 
     @Test
     void toLocationResponse_Success() {
-        when(weatherService.getForecastForLocation(any(Location.class))).thenReturn(forecast);
-
-        LocationResponse result = weatherForecastService.toLocationResponse(forecast);
+        LocationResponse result = weatherForecastService.toLocationResponse(forecast, DATE_FORMAT.format(new Date()));
 
         assertNotNull(result);
         assertEquals("Jastarnia", result.getCityName());
@@ -99,10 +98,8 @@ public class WeatherForecastServiceTest {
 
     @Test
     void toLocationResponse_ForecastEmpty() {
-        when(weatherService.getForecastForLocation(any(Location.class))).thenReturn(forecast);
-
         Exception exception = assertThrows(ForecastProcessingException.class, () -> {
-            weatherForecastService.toLocationResponse(null);
+            weatherForecastService.toLocationResponse(null, DATE_FORMAT.format(new Date()));
         });
 
         assertEquals("Invalid forecast data for conversion to LocationResponse", exception.getMessage());
@@ -115,7 +112,7 @@ public class WeatherForecastServiceTest {
         when(forecast.getData()).thenThrow(new RuntimeException("Unexpected error"));
 
         Exception exception = assertThrows(ForecastProcessingException.class, () -> {
-            weatherForecastService.toLocationResponse(forecast);
+            weatherForecastService.toLocationResponse(forecast, DATE_FORMAT.format(new Date()));
         });
 
         assertEquals("An unexpected error occurred while converting forecast to LocationResponse", exception.getMessage());
