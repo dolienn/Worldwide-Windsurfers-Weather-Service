@@ -40,11 +40,11 @@ public class WeatherForecastServiceTest {
         MockitoAnnotations.openMocks(this);
 
         locations = List.of(
-                new Location("Jastarnia", "Poland", "PL"),
-                new Location("Bridgetown", "Barbados", "BB"),
-                new Location("Fortaleza", "Brazil", "BR"),
-                new Location("Pissouri", "Cyprus", "CY"),
-                new Location("Le Morne", "Mauritius", "MU")
+                new Location("Jastarnia", "Poland"),
+                new Location("Bridgetown", "Barbados"),
+                new Location("Fortaleza", "Brazil"),
+                new Location("Pissouri", "Cyprus"),
+                new Location("Le Morne", "Mauritius")
         );
 
         forecast = new WeatherForecast();

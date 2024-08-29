@@ -40,7 +40,7 @@ public class WeatherForecastControllerTest {
 
         locationResponse = new LocationResponse("Jastarnia", 22.57, 12.34);
         forecast = new WeatherForecast();
-        forecast.setLocation(new Location("Jastarnia", "Poland", "PL"));
+        forecast.setLocation(new Location("Jastarnia", "Poland"));
         forecast.setData(List.of(new WeatherData(
                 new SimpleDateFormat("yyyy-MM-dd").format(new Date()), 15.0, 25.0, 15.0, 18.0
         )));
