@@ -26,11 +26,11 @@ public class WeatherForecastService {
     private final WeatherService weatherService;
 
     private final List<Location> locations = List.of(
-            new Location("Jastarnia", "Poland", "PL"),
-            new Location("Bridgetown", "Barbados", "BB"),
-            new Location("Fortaleza", "Brazil", "BR"),
-            new Location("Pissouri", "Cyprus", "CY"),
-            new Location("Le Morne", "Mauritius", "MU")
+            new Location("Jastarnia", "Poland"),
+            new Location("Bridgetown", "Barbados"),
+            new Location("Fortaleza", "Brazil"),
+            new Location("Pissouri", "Cyprus"),
+            new Location("Le Morne", "Mauritius")
     );
 
     public List<WeatherForecast> toWeatherForecasts() {
