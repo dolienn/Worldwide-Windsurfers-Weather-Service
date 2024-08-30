@@ -123,7 +123,7 @@ public class WeatherForecastService {
 
     protected double calculateScore(WeatherData forecast) {
         try {
-            return Math.pow(forecast.getWind_spd(), 3) + forecast.getAvg_temp();
+            return (forecast.getWind_spd() * 3) + forecast.getAvg_temp();
         } catch (Exception e) {
             throw new ForecastProcessingException("Error calculating score for weather data", e);
         }

@@ -23,7 +23,7 @@ public class WeatherForecastController {
     private final WeatherForecastService service;
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 
-    @GetMapping("/locations-for-windsurfing")
+    @GetMapping("/locations")
     public ResponseEntity<List<WeatherForecast>> getLocations() {
         List<WeatherForecast> bestLocations = service.toWeatherForecasts();
         return ResponseEntity.ok(bestLocations);
