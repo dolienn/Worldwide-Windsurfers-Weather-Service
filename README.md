@@ -32,7 +32,6 @@ Ensure the following tools are installed on your system:
   ```bash
   npm install -g @angular/cli
 
-
 1. **Clone the Repository**
 
    Clone the repository and navigate into the project directory:
@@ -70,10 +69,12 @@ Ensure the following tools are installed on your system:
 The backend provides the following API endpoints for fetching windsurfing locations:
 
 - **Get the best windsurfing location**:
+ 
   ```bash
   http://localhost:8080/api/windsurfing/best-location
 
 - **Get all windsurfing locations**:
+ 
   ```bash
   http://localhost:8080/api/windsurfing/locations
 
