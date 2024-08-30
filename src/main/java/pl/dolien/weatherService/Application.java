@@ -12,9 +12,4 @@ public class Application implements WebMvcConfigurer {
 		SpringApplication.run(Application.class, args);
 	}
 
-	@Override
-	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		registry.addResourceHandler("/**")
-				.addResourceLocations("classpath:/static/");
-	}
 }
