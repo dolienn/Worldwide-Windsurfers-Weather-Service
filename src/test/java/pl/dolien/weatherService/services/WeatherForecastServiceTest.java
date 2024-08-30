@@ -209,7 +209,7 @@ public class WeatherForecastServiceTest {
     void calculateScore_Success() {
         double result = weatherForecastService.calculateScore(forecast.getData().get(0));
 
-        assertEquals(Math.pow(forecast.getData().get(0).getWind_spd(), 3) + forecast.getData().get(0).getAvg_temp(), result);
+        assertEquals(forecast.getData().get(0).getWind_spd() * 3 + forecast.getData().get(0).getAvg_temp(), result);
     }
 
     @Test
