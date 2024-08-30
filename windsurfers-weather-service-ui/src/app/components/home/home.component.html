@@ -1,6 +1,31 @@
-<input type="date" [(ngModel)]="date" [attr.min]="minDate" [attr.max]="maxDate">
-<button (click)="getBestLocationForWindsurfing()">Send</button>
-<p *ngIf="isLocation">{{bestLocation.cityName}}</p>
-<p *ngIf="isLocation">{{bestLocation.avgTemp}}</p>
-<p *ngIf="isLocation">{{bestLocation.windSpd}}</p>
-<p *ngIf="!isLocation">No location found</p>
+<div class="container">
+    <div class="weather-forecast">
+        <p>Select a date from today up to 16 days ahead</p>
+        <div class="date-input">
+            <input type="date" [(ngModel)]="date" [attr.min]="minDate" [attr.max]="maxDate" placeholder="Pick a date">
+        </div>
+        <div class="best-location-button">
+            <button (click)="getBestLocationForWindsurfing()">Get Best Location</button>
+        </div>
+
+        <div *ngIf="!isLoading" class="location-wrapper">
+            <div *ngIf="isLocation" class="city-name">
+                <p>{{bestLocation.cityName}}</p>
+            </div>
+            <div *ngIf="isLocation" class="weather-info">
+                <div class="temperature">
+                    <p>{{bestLocation.avgTemp}} <span>°C</span></p>
+                </div>
+                <div class="wind-speed">
+                    <p>{{bestLocation.windSpd}} <span>m/s</span></p>
+                </div>
+            </div>
+
+            <div *ngIf="!isLocation" class="no-location">
+                <p>No location found</p>
+            </div>
+        </div>
+
+        <app-loader *ngIf="isLoading"></app-loader>
+    </div>
+</div>

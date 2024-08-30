@@ -14,6 +14,7 @@ export class HomeComponent implements OnInit {
   minDate: string = '';
   maxDate: string = '';
   isLocation: boolean = true;
+  isLoading: boolean = true;
   constructor(
     private service: WeatherForecastService,
     private datePipe: DatePipe
@@ -25,6 +26,7 @@ export class HomeComponent implements OnInit {
   }
 
   getBestLocationForWindsurfing() {
+    this.isLoading = true;
     let formattedDate = this.transformDate(this.date);
     if (formattedDate == null) {
       formattedDate = this.transformDate(new Date())!;
@@ -38,6 +40,8 @@ export class HomeComponent implements OnInit {
         } else {
           this.isLocation = false;
         }
+
+        this.isLoading = false;
       });
   }
 
