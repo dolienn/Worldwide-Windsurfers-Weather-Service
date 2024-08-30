@@ -8,7 +8,5 @@ spring:
   application:
     name: Worldwide Windsurfers Weather Service
 server:
-  servlet:
-    context-path: /api/
   port: ${PORT:8080}
 

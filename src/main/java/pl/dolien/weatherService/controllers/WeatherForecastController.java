@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/windsurfing")
+@RequestMapping("/api/windsurfing")
 @RequiredArgsConstructor
 public class WeatherForecastController {
     private final WeatherForecastService service;
