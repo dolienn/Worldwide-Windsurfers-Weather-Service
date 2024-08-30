@@ -1,0 +1,26 @@
+services:
+  spring-boot-application:
+    build: .
+    container_name: spring-boot-application
+    env_file:
+      - .env
+    ports:
+      - 8080:8080
+    networks:
+      - spring-boot-network
+    restart: unless-stopped
+
+  angular-application:
+    build: ./windsurfers-weather-service-ui
+    container_name: angular-application
+    ports:
+      - 80:80
+    networks:
+      - spring-boot-network
+    depends_on:
+      - spring-boot-application
+    restart: unless-stopped
+
+networks:
+  spring-boot-network:
+    driver: bridge
