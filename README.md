@@ -90,6 +90,23 @@ Visit the web application to:
 - **Discover the best locations for your next adventure.**
 - **Access all features conveniently from your browser!**
 
+## Verifying Application Functionality
+To ensure the Worldwide Windsurfers Weather Service is working correctly after setup, follow these steps:
+- **Access the API Endpoints:**
+  - Open a browser or use tools like Postman/cURL to test the following endpoints:
+    - `GET /api/windsurfing/best-location`: Navigate to `http://localhost:8080/api/windsurfing/best-location?date=your_chosen_date` to fetch the city with the best windsurfing conditions. Expected response: JSON data with the city name, wind speed, and temperature.
+    -  `GET /api/windsurfing/locations`: Go to `http://localhost:8080/api/windsurfing/locations` to get a list of cities and their current weather data. Expected response: A JSON array containing multiple cities, each with weather information (e.g., wind speed, temperature).
+   
+- **Frontend Verification:**
+  - Once the backend and frontend are running, open a browser and visit `http://localhost:80` (for local setup) or the live version at: [🌐 Live App](https://windsurfers-weather-service-b435c5ef89a3.herokuapp.com/)
+  - Verify that the app displays the current weather conditions and allows you to select different dates. After choosing a date, the application should show the best location for windsurfing on that specific date based on the forecast data.
+ 
+- **Test Basic Functionality:**
+  - Best Location: Check if the "Best Location" feature identifies a suitable city for windsurfing based on real-time or future date weather data.
+  - Location Search: Search or browse through cities to ensure accurate weather data is being fetched and displayed for the selected dates.
+  - Responsive UI: Test the app across different devices or screen sizes to ensure a smooth and adaptive user experience.
+
+By following these steps, you can confirm that the application is working as expected both locally and online.
 
 ## Troubleshooting
 
