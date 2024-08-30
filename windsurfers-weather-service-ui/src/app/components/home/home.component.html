@@ -1,0 +1,6 @@
+<input type="date" [(ngModel)]="date" [attr.min]="minDate" [attr.max]="maxDate">
+<button (click)="getBestLocationForWindsurfing()">Send</button>
+<p *ngIf="isLocation">{{bestLocation.cityName}}</p>
+<p *ngIf="isLocation">{{bestLocation.avgTemp}}</p>
+<p *ngIf="isLocation">{{bestLocation.windSpd}}</p>
+<p *ngIf="!isLocation">No location found</p>
