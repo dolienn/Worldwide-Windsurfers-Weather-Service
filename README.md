@@ -63,7 +63,7 @@ Ensure the following tools are installed on your system:
 
    Once the Docker services are up and running, you can visit the application at:
 
-   http://localhost:8080
+   http://localhost:80
 
 ## Available API Endpoints
 
