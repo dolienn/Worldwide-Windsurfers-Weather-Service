@@ -47,6 +47,7 @@ Ensure the following tools are installed on your system:
    - Create an account on the Weatherbit website.
    - Once logged in, navigate to the API section and generate your API key.
    - Edit a `.env` file in the root directory of the project and edit your API key:
+
   
    ```bash
    WEATHERBIT_API_KEY=your_api_key_here
