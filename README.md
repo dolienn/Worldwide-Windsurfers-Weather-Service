@@ -78,7 +78,6 @@ The backend provides the following API endpoints for fetching windsurfing locati
   ```bash
   http://localhost:8080/api/windsurfing/locations
 
-
 ## Access the Live Application
 You can explore the Worldwide Windsurfers Weather Service online:
 
