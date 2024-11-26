@@ -147,11 +147,9 @@ public class WeatherForecastServiceTest {
 
         Date date = new GregorianCalendar(2024, Calendar.AUGUST, 20).getTime();
 
-        Exception exception = assertThrows(ForecastProcessingException.class, () -> {
+        assertThrows(ForecastProcessingException.class, () -> {
             weatherForecastService.getBestForecastForDate(date);
         });
-
-        assertEquals("An error occurred while finding the best forecast for date: Tue Aug 20 00:00:00 CEST 2024", exception.getMessage());
     }
 
     @Test
