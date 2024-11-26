@@ -1,0 +1,1 @@
+web: java -jar target/Worldwide-Windsurfer-s-Weather-Service-0.0.1-SNAPSHOT.jar

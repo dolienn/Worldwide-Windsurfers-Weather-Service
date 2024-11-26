@@ -4,5 +4,5 @@ spring:
   application:
     name: Worldwide Windsurfers Weather Service
 server:
-  port: ${PORT:8089}
+  port: 8089
 
