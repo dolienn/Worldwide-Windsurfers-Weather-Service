@@ -74,6 +74,18 @@
 					</excludes>
 				</configuration>
 			</plugin>
+
+			<plugin>
+				<groupId>com.heroku.sdk</groupId>
+				<artifactId>heroku-maven-plugin</artifactId>
+				<version>3.0.7</version>
+				<configuration>
+					<appName>worldwide-windsurfers-weather-service</appName>
+					<processTypes>
+						<web>java -jar -Dserver.port=$PORT target/${project.build.finalName}.jar</web>
+					</processTypes>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 
