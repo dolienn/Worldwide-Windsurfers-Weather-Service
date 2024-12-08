@@ -1,5 +1,5 @@
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:8080/api/windsurfing',
+  apiUrl: 'http://localhost:8089/api/windsurfing',
 };
 
