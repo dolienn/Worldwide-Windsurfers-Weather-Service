@@ -1,1 +1,1 @@
-web: java -Dserver.port=8089 -jar deploy/Worldwide-Windsurfer-s-Weather-Service-0.0.1-SNAPSHOT.jar
+web: java -Dserver.port=$PORT -jar deploy/Worldwide-Windsurfer-s-Weather-Service-0.0.1-SNAPSHOT.jar
