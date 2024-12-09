@@ -1,5 +1,9 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'maven:3.9.6-openjdk-17'
+        }
+    }
 
     tools {
         maven "M3"
@@ -20,6 +24,15 @@ pipeline {
              steps {
                 sh "mvn clean heroku:deploy"
             }
+        }
+    }
+
+    post {
+        success {
+            echo 'Pipeline successfully completed.'
+        }
+        failure {
+            echo 'Pipeline failed.'
         }
     }
 }

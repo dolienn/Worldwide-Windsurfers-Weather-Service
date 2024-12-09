@@ -11,7 +11,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class WeatherForecast {
+public class WeatherDTO {
     private Location location;
     private List<WeatherData> data;
     private double lat;

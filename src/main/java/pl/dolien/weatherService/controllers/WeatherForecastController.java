@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import pl.dolien.weatherService.entities.LocationResponse;
-import pl.dolien.weatherService.entities.WeatherForecast;
+import pl.dolien.weatherService.entities.WeatherDTO;
 import pl.dolien.weatherService.services.WeatherForecastService;
 
 import java.text.ParseException;
@@ -24,8 +24,8 @@ public class WeatherForecastController {
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 
     @GetMapping("/locations")
-    public ResponseEntity<List<WeatherForecast>> getLocations() {
-        List<WeatherForecast> bestLocations = service.toWeatherForecasts();
+    public ResponseEntity<List<WeatherDTO>> getLocations() {
+        List<WeatherDTO> bestLocations = service.toWeatherForecasts();
         return ResponseEntity.ok(bestLocations);
     }
 

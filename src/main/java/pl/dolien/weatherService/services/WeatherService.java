@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import pl.dolien.weatherService.entities.Location;
-import pl.dolien.weatherService.entities.WeatherForecast;
+import pl.dolien.weatherService.entities.WeatherDTO;
 import pl.dolien.weatherService.handlers.WeatherServiceException;
 
 @Service
@@ -20,13 +20,13 @@ public class WeatherService {
     @Value("${weatherbit.url}")
     private String weatherbitUrl;
 
-    public WeatherForecast getForecastForLocation(Location location) {
+    public WeatherDTO getForecastForLocation(Location location) {
         try {
             String url = String.format("%s?city=%s&key=%s", weatherbitUrl, location.getCityName(), apiKey);
-            ResponseEntity<WeatherForecast> response = restTemplate.getForEntity(url, WeatherForecast.class);
+            ResponseEntity<WeatherDTO> response = restTemplate.getForEntity(url, WeatherDTO.class);
 
             if (response.getStatusCode() == HttpStatus.OK) {
-                WeatherForecast forecast = response.getBody();
+                WeatherDTO forecast = response.getBody();
                 if (forecast != null) {
                     forecast.setLocation(location);
                     return forecast;

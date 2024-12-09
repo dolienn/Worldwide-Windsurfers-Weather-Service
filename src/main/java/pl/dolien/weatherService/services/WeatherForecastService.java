@@ -5,9 +5,10 @@ import org.springframework.stereotype.Service;
 import pl.dolien.weatherService.entities.Location;
 import pl.dolien.weatherService.entities.LocationResponse;
 import pl.dolien.weatherService.entities.WeatherData;
-import pl.dolien.weatherService.entities.WeatherForecast;
+import pl.dolien.weatherService.entities.WeatherDTO;
 import pl.dolien.weatherService.handlers.ForecastProcessingException;
 import pl.dolien.weatherService.handlers.WeatherServiceException;
+import pl.dolien.weatherService.webclient.weather.WeatherClient;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -23,7 +24,7 @@ public class WeatherForecastService {
     private static final double MIN_TEMP = 5.0;
     private static final double MAX_TEMP = 35.0;
 
-    private final WeatherService weatherService;
+    private final WeatherClient weatherClient;
 
     private final List<Location> locations = List.of(
             new Location("Jastarnia", "Poland"),
@@ -33,17 +34,17 @@ public class WeatherForecastService {
             new Location("Le Morne", "Mauritius")
     );
 
-    public List<WeatherForecast> toWeatherForecasts() {
+    public List<WeatherDTO> toWeatherForecasts() {
         try {
             return locations.stream()
                     .map(location -> {
-                        WeatherForecast forecast = weatherService.getForecastForLocation(location);
+                        WeatherDTO forecast = weatherClient.getForecastForLocation(location);
 
                         List<WeatherData> suitableData = forecast.getData().stream()
                                 .filter(this::isSuitableForWindsurfing)
                                 .toList();
 
-                        return new WeatherForecast(forecast.getLocation(), suitableData, forecast.getLat(), forecast.getLon());
+                        return new WeatherDTO(forecast.getLocation(), suitableData, forecast.getLat(), forecast.getLon());
                     })
                     .toList();
         } catch (WeatherServiceException e) {
@@ -53,7 +54,7 @@ public class WeatherForecastService {
         }
     }
 
-    public LocationResponse toLocationResponse(WeatherForecast forecast, String targetDate) {
+    public LocationResponse toLocationResponse(WeatherDTO forecast, String targetDate) {
         try {
             if (forecast == null || forecast.getData().isEmpty()) {
                 throw new IllegalArgumentException();
@@ -84,14 +85,14 @@ public class WeatherForecastService {
         try {
             String dateString = new SimpleDateFormat("yyyy-MM-dd").format(date);
 
-            List<WeatherForecast> forecastsForDate = toWeatherForecasts()
+            List<WeatherDTO> forecastsForDate = toWeatherForecasts()
                     .stream()
                     .filter(forecast -> forecast.getData()
                             .stream()
                             .anyMatch(data -> data.getDatetime().equals(dateString)))
                     .toList();
 
-            Optional<WeatherForecast> bestForecast = forecastsForDate
+            Optional<WeatherDTO> bestForecast = forecastsForDate
                     .stream()
                     .max((f1, f2) -> Double.compare(calculateMaxScore(f1), calculateMaxScore(f2)));
 
@@ -110,7 +111,7 @@ public class WeatherForecastService {
         }
     }
 
-    protected double calculateMaxScore(WeatherForecast forecast) {
+    protected double calculateMaxScore(WeatherDTO forecast) {
         try {
             return forecast.getData().stream()
                     .mapToDouble(this::calculateScore)

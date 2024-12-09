@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import pl.dolien.weatherService.entities.Location;
-import pl.dolien.weatherService.entities.WeatherForecast;
+import pl.dolien.weatherService.entities.WeatherDTO;
 import pl.dolien.weatherService.handlers.WeatherServiceException;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -33,13 +33,13 @@ public class WeatherServiceTest {
     @Test
     void getForecastForLocation_Success() {
         Location location = new Location("San Francisco", "USA");
-        WeatherForecast forecast = new WeatherForecast();
+        WeatherDTO forecast = new WeatherDTO();
         forecast.setLocation(location);
 
-        ResponseEntity<WeatherForecast> responseEntity = new ResponseEntity<>(forecast, HttpStatus.OK);
-        when(restTemplate.getForEntity(anyString(), eq(WeatherForecast.class))).thenReturn(responseEntity);
+        ResponseEntity<WeatherDTO> responseEntity = new ResponseEntity<>(forecast, HttpStatus.OK);
+        when(restTemplate.getForEntity(anyString(), eq(WeatherDTO.class))).thenReturn(responseEntity);
 
-        WeatherForecast result = weatherService.getForecastForLocation(location);
+        WeatherDTO result = weatherService.getForecastForLocation(location);
 
         assertNotNull(result);
         assertEquals(location, result.getLocation());
@@ -48,8 +48,8 @@ public class WeatherServiceTest {
     @Test
     void getForecastForLocation_NoData() {
         Location location = new Location("San Francisco", "USA");
-        ResponseEntity<WeatherForecast> responseEntity = new ResponseEntity<>(null, HttpStatus.OK);
-        when(restTemplate.getForEntity(anyString(), eq(WeatherForecast.class))).thenReturn(responseEntity);
+        ResponseEntity<WeatherDTO> responseEntity = new ResponseEntity<>(null, HttpStatus.OK);
+        when(restTemplate.getForEntity(anyString(), eq(WeatherDTO.class))).thenReturn(responseEntity);
 
         Exception exception = assertThrows(WeatherServiceException.class, () -> {
             weatherService.getForecastForLocation(location);
@@ -61,7 +61,7 @@ public class WeatherServiceTest {
     @Test
     void getForecastForLocation_FailedRequest() {
         Location location = new Location("San Francisco", "USA");
-        when(restTemplate.getForEntity(anyString(), eq(WeatherForecast.class)))
+        when(restTemplate.getForEntity(anyString(), eq(WeatherDTO.class)))
                 .thenThrow(new RestClientException("Request failed"));
 
         Exception exception = assertThrows(WeatherServiceException.class, () -> {
@@ -74,8 +74,8 @@ public class WeatherServiceTest {
     @Test
     void getForecastForLocation_BadResponse() {
         Location location = new Location("San Francisco", "USA");
-        ResponseEntity<WeatherForecast> responseEntity = new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-        when(restTemplate.getForEntity(anyString(), eq(WeatherForecast.class))).thenReturn(responseEntity);
+        ResponseEntity<WeatherDTO> responseEntity = new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        when(restTemplate.getForEntity(anyString(), eq(WeatherDTO.class))).thenReturn(responseEntity);
 
         Exception exception = assertThrows(WeatherServiceException.class, () -> {
             weatherService.getForecastForLocation(location);

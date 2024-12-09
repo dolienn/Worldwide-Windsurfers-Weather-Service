@@ -10,18 +10,17 @@ import org.springframework.http.ResponseEntity;
 import pl.dolien.weatherService.entities.Location;
 import pl.dolien.weatherService.entities.LocationResponse;
 import pl.dolien.weatherService.entities.WeatherData;
-import pl.dolien.weatherService.entities.WeatherForecast;
+import pl.dolien.weatherService.entities.WeatherDTO;
 import pl.dolien.weatherService.services.WeatherForecastService;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
-public class WeatherForecastControllerTest {
+public class WeatherDTOControllerTest {
     @Mock
     private WeatherForecastService service;
 
@@ -29,8 +28,8 @@ public class WeatherForecastControllerTest {
     private WeatherForecastController controller;
 
     private LocationResponse locationResponse;
-    private WeatherForecast forecast;
-    private List<WeatherForecast> forecastList;
+    private WeatherDTO forecast;
+    private List<WeatherDTO> forecastList;
 
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -39,7 +38,7 @@ public class WeatherForecastControllerTest {
         MockitoAnnotations.openMocks(this);
 
         locationResponse = new LocationResponse("Jastarnia", 22.57, 12.34);
-        forecast = new WeatherForecast();
+        forecast = new WeatherDTO();
         forecast.setLocation(new Location("Jastarnia", "Poland"));
         forecast.setData(List.of(new WeatherData(
                 new SimpleDateFormat("yyyy-MM-dd").format(new Date()), 15.0, 25.0, 15.0, 18.0
@@ -52,7 +51,7 @@ public class WeatherForecastControllerTest {
     void getLocations_Success() {
         when(service.toWeatherForecasts()).thenReturn(forecastList);
 
-        ResponseEntity<List<WeatherForecast>> response = controller.getLocations();
+        ResponseEntity<List<WeatherDTO>> response = controller.getLocations();
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());

@@ -8,7 +8,7 @@ import org.mockito.MockitoAnnotations;
 import pl.dolien.weatherService.entities.Location;
 import pl.dolien.weatherService.entities.LocationResponse;
 import pl.dolien.weatherService.entities.WeatherData;
-import pl.dolien.weatherService.entities.WeatherForecast;
+import pl.dolien.weatherService.entities.WeatherDTO;
 import pl.dolien.weatherService.handlers.ForecastProcessingException;
 import pl.dolien.weatherService.handlers.WeatherServiceException;
 
@@ -20,7 +20,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class WeatherForecastServiceTest {
+public class WeatherDTOServiceTest {
 
     @Mock
     private WeatherService weatherService;
@@ -30,7 +30,7 @@ public class WeatherForecastServiceTest {
 
     private List<Location> locations;
 
-    private WeatherForecast forecast;
+    private WeatherDTO forecast;
 
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -47,7 +47,7 @@ public class WeatherForecastServiceTest {
                 new Location("Le Morne", "Mauritius")
         );
 
-        forecast = new WeatherForecast();
+        forecast = new WeatherDTO();
         forecast.setLocation(locations.get(0));
         forecast.setData(List.of(
                 new WeatherData(
@@ -59,7 +59,7 @@ public class WeatherForecastServiceTest {
     void toWeatherForecasts_Success() {
         when(weatherService.getForecastForLocation(any(Location.class))).thenReturn(forecast);
 
-        List<WeatherForecast> result = weatherForecastService.toWeatherForecasts();
+        List<WeatherDTO> result = weatherForecastService.toWeatherForecasts();
 
         assertNotNull(result);
         assertEquals(5, result.size());
@@ -108,7 +108,7 @@ public class WeatherForecastServiceTest {
 
     @Test
     void toLocationResponse_UnexpectedError() {
-        WeatherForecast forecast = mock(WeatherForecast.class);
+        WeatherDTO forecast = mock(WeatherDTO.class);
         when(forecast.getData()).thenThrow(new RuntimeException("Unexpected error"));
 
         Exception exception = assertThrows(ForecastProcessingException.class, () -> {

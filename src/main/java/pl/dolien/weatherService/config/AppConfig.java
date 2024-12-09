@@ -1,5 +1,6 @@
 package pl.dolien.weatherService.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
@@ -15,6 +16,10 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @Configuration
 public class AppConfig {
+
+    @Value("${heroku.url}")
+    private String herokuUrl;
+
     @Bean
     public RestTemplate restTemplate() {
         return new RestTemplate();
@@ -25,7 +30,7 @@ public class AppConfig {
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         final CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.setAllowedOrigins(List.of("https://windsurfers-weather-service-02e8055dc282.herokuapp.com"));
+        config.setAllowedOrigins(List.of(herokuUrl, "http://localhost:4200"));
         config.setAllowedHeaders(Arrays.asList(
                 ORIGIN,
                 CONTENT_TYPE,

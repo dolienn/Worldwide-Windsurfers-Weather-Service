@@ -4,3 +4,5 @@ spring:
 weatherbit:
   apiKey: ${WEATHERBIT_API_KEY}
   url: ${WEATHERBIT_URL}
+heroku:
+  url: ${HEROKU_URL}
