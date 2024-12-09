@@ -1,4 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://windsurfers-weather-service-a6b2d69dd752.herokuapp.com/api/windsurfing',
+  apiUrl:
+    'https://windsurfers-weather-service-02e8055dc282.herokuapp.com/api/windsurfing',
 };

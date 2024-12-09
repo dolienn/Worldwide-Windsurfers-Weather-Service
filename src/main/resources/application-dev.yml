@@ -3,4 +3,4 @@ spring:
     import: optional:file:.env[.properties]
 weatherbit:
   apiKey: ${WEATHERBIT_API_KEY}
-  url: https://api.weatherbit.io/v2.0/forecast/daily
+  url: ${WEATHERBIT_URL}
