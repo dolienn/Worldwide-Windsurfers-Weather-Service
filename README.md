@@ -3,7 +3,7 @@
 ## Overview
 
 Weather Service is an application designed to help windsurfing enthusiasts find the best cities around the world for their sport. By analyzing current weather conditions, including wind speed and temperature, the app provides precise and up-to-date information to help users identify ideal locations for their water sports adventures.
-Built with a robust tech stack including **Spring Boot**, **Spring Security**, **Hibernate**, **Angular**, **TypeScript**, **HTML**, **SCSS**, **Docker**, Weather Service combines efficiency and user satisfaction.
+Built with a robust tech stack including **Spring Boot**, **Spring Security**, **Hibernate**, **PostgreSQL**, **Liquibase**, **Jenkins**, **Weatherbit API**, **Angular**, **TypeScript**, **HTML**, **SCSS**, **NGINX**, **Docker**, **Docker Compose**, **JUnit**, and **Mockito**. Weather Service combines efficiency and user satisfaction.
 
 
 ## Features
