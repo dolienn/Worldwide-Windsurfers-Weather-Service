@@ -4,8 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-import pl.dolien.weatherService.entities.Location;
-import pl.dolien.weatherService.entities.WeatherDTO;
+import pl.dolien.weatherService.entities.WeatherForecastDTO;
+import pl.dolien.weatherService.webclient.weather.dto.OpenWeatherWeatherDTO;
+
+import static pl.dolien.weatherService.webclient.weather.WeatherClientMapper.toWeatherDTO;
+import static pl.dolien.weatherService.webclient.weather.WeatherUrlBuilder.buildUrl;
 
 @Component
 @RequiredArgsConstructor
@@ -19,13 +22,14 @@ public class WeatherClient {
     @Value("${weatherbit.url}")
     private String weatherbitUrl;
 
-    public WeatherDTO getForecastForLocation(Location location) {
-        String url = String.format("%s?city=%s&key=%s", weatherbitUrl, location.getCityName(), apiKey);
-        WeatherDTO weatherDto = restTemplate.getForObject(url, WeatherDTO.class);
+    public WeatherForecastDTO getForecastForLocation(String cityName) {
+        String url = buildUrl(cityName, apiKey);
+        OpenWeatherWeatherDTO openWeatherWeatherDTO = callGetMethod(url, OpenWeatherWeatherDTO.class);
+        System.out.println(openWeatherWeatherDTO);
+        return toWeatherDTO(openWeatherWeatherDTO);
+    }
 
-        assert weatherDto != null;
-        weatherDto.setLocation(location);
-
-        return weatherDto;
+    private <T> T callGetMethod(String url, Class<T> responseType, Object... objects) {
+        return restTemplate.getForObject(weatherbitUrl + url, responseType, objects);
     }
 }

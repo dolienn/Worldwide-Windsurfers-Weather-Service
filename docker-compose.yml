@@ -5,22 +5,48 @@ services:
     env_file:
       - .env
     ports:
-      - 8089:8089
+      - "8089:8089"
     networks:
       - spring-boot-network
+    depends_on:
+      - postgres_database
+    environment:
+      SPRING_DATASOURCE_URL: ${DB_DOCKER_URL}
+      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
     restart: unless-stopped
 
   angular-application:
     build: ./windsurfers-weather-service-ui
     container_name: angular-application
     ports:
-      - 80:80
+      - "80:80"
     networks:
       - spring-boot-network
     depends_on:
       - spring-boot-application
     restart: unless-stopped
 
+  postgres_database:
+    container_name: postgres-sql-database
+    image: postgres
+    volumes:
+      - postgres:/data/postgres
+    ports:
+      - ${DB_PORT}:${DB_PORT}
+    networks:
+      - spring-boot-network
+    environment:
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      PGDATA: /var/lib/postgresql/data
+      POSTGRES_DB: weather-service
+    restart: unless-stopped
+
 networks:
   spring-boot-network:
     driver: bridge
+
+volumes:
+  postgres:
+    driver: local

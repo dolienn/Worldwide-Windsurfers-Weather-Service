@@ -14,6 +14,7 @@ FROM openjdk:17-slim
 WORKDIR /app
 
 COPY --from=build /app/target/Worldwide-Windsurfer-s-Weather-Service-0.0.1-SNAPSHOT.jar app.jar
+COPY --from=build /app/src/main/resources/database /database
 
 EXPOSE 8089
 

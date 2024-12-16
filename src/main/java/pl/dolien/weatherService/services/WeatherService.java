@@ -1,43 +1,71 @@
 package pl.dolien.weatherService.services;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestTemplate;
 import pl.dolien.weatherService.entities.Location;
-import pl.dolien.weatherService.entities.WeatherDTO;
-import pl.dolien.weatherService.handlers.WeatherServiceException;
+import pl.dolien.weatherService.entities.LocationResponse;
+import pl.dolien.weatherService.entities.WeatherData;
+import pl.dolien.weatherService.entities.WeatherForecastDTO;
+import pl.dolien.weatherService.exceptions.NoDataAvailableException;
+import pl.dolien.weatherService.filter.WeatherFilter;
+import pl.dolien.weatherService.webclient.weather.WeatherClient;
+
+import java.util.List;
+
+import static pl.dolien.weatherService.mapper.WeatherMapper.toLocationResponse;
+import static pl.dolien.weatherService.mapper.WeatherMapper.toWeatherDTO;
+import static pl.dolien.weatherService.scorer.WeatherScorer.getHighestWeatherScore;
 
 @Service
 @RequiredArgsConstructor
 public class WeatherService {
-    private final RestTemplate restTemplate;
-    @Value("${weatherbit.apiKey}")
-    private String apiKey;
-    @Value("${weatherbit.url}")
-    private String weatherbitUrl;
 
-    public WeatherDTO getForecastForLocation(Location location) {
-        try {
-            String url = String.format("%s?city=%s&key=%s", weatherbitUrl, location.getCityName(), apiKey);
-            ResponseEntity<WeatherDTO> response = restTemplate.getForEntity(url, WeatherDTO.class);
+    private final WeatherClient weatherClient;
+    private final WeatherFilter weatherFilter;
+    private final LocationService locationService;
 
-            if (response.getStatusCode() == HttpStatus.OK) {
-                WeatherDTO forecast = response.getBody();
-                if (forecast != null) {
-                    forecast.setLocation(location);
-                    return forecast;
-                } else {
-                    throw new WeatherServiceException("No weather forecast data found for location: " + location.getCityName());
-                }
-            } else {
-                throw new WeatherServiceException("Failed to retrieve weather forecast. Status code: " + response.getStatusCode());
-            }
-        } catch (RestClientException e) {
-            throw new WeatherServiceException("Error while calling weather service", e);
-        }
+    public List<WeatherForecastDTO> getSuitableWeatherForecasts() {
+        return locationService.getAllLocations().stream()
+                .map(this::fetchAndFilterWeather)
+                .toList();
+    }
+
+    public LocationResponse getBestForecastForDate(String date) {
+        List<WeatherForecastDTO> forecastsForDate = filterForecastsByDate(date);
+
+        return forecastsForDate.size() == 1
+                ? createResponseFromForecast(forecastsForDate.get(0), date)
+                : getHighestScoringForecast(forecastsForDate, date);
+    }
+
+    private WeatherForecastDTO fetchAndFilterWeather(Location location) {
+        WeatherForecastDTO forecast = weatherClient.getForecastForLocation(location.getCityName());
+        List<WeatherData> filteredData = weatherFilter.filterSuitableWeatherData(forecast.getForecastData());
+        return toWeatherDTO(location, filteredData);
+    }
+
+    private List<WeatherForecastDTO> filterForecastsByDate(String date) {
+        return getSuitableWeatherForecasts().stream()
+                .filter(forecast -> weatherFilter.hasDataForDate(forecast, date))
+                .toList();
+    }
+
+    private LocationResponse createResponseFromForecast(WeatherForecastDTO forecast, String targetDate) {
+        WeatherData data = weatherFilter.getWeatherDataForDate(forecast, targetDate)
+                .orElseThrow(() -> new NoDataAvailableException("No data available for the specified date"));
+        return toLocationResponse(forecast.getLocation().getCityName(), data);
+    }
+
+    private LocationResponse getHighestScoringForecast(List<WeatherForecastDTO> forecasts, String date) {
+        return forecasts.stream()
+                .max(this::compareWeatherScores)
+                .map(forecast -> createResponseFromForecast(forecast, date))
+                .orElse(null);
+    }
+
+    private int compareWeatherScores(WeatherForecastDTO first, WeatherForecastDTO second) {
+        double firstScore = getHighestWeatherScore(first);
+        double secondScore = getHighestWeatherScore(second);
+        return Double.compare(firstScore, secondScore);
     }
 }
