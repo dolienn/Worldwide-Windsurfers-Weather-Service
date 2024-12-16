@@ -30,7 +30,8 @@ public class AppConfig {
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         final CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.setAllowedOrigins(List.of(herokuUrl, "http://localhost:4200", "http://localhost:8089", "http://localhost"));
+        config.setAllowedOrigins(List.of(herokuUrl, "http://localhost:4200", "http://localhost:8089",
+                "http://localhost:80"));
         config.setAllowedHeaders(Arrays.asList(
                 ORIGIN,
                 CONTENT_TYPE,
